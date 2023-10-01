@@ -7,10 +7,12 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-
+#include <iostream>
 
 int main(int argc, char* argv[]){
-    int a = 1;
-    assert(a == 1);
+    int port = 1;
+    std::cout << port << std::endl;
+    std::cout << htons(port) << std::endl;
     // assert(a == 2);
+    return 0;
 }

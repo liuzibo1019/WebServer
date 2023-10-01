@@ -17,27 +17,35 @@ int main(int argc, char *argv[])
     }
 
     const char *ip = argv[1];
+    // atoi convert string to integer
     int port = atoi(argv[2]);
 
+    // 创建socket描述符, 参数依次为协议域, socket的类型SOCK_STREAM即TCP, 协议0表示使用默认协议
     int listenfd = socket(PF_INET, SOCK_STREAM, 0);
     assert(listenfd >= 1);
-    // printf("listenfd: %d", listenfd);
+
+    // 地址结构
     struct sockaddr_in address;
     memset(&address, 0, sizeof(address));
+    // 设置地址族, AF_INET为IPV4
     address.sin_family = AF_INET;
+    // 设置端口号, htons用于网络字节序与主机字节序之间转换的函数
     address.sin_port = htons(port);
     inet_pton(AF_INET, ip, &address.sin_addr);
 
     int ret = 0;
+    // bind用于将socket返回的文件描述符与地址进行绑定
     ret = bind(listenfd, (struct sockaddr *)(&address), sizeof(address));
     // printf("bind: %d", ret);
     assert(ret != -1);
 
+    // listen 对socket返回的文件描述符进行监听
     ret = listen(listenfd, 5);
     assert(ret != -1);
 
     struct sockaddr_in client;
     socklen_t client_addrlength = sizeof(client);
+    
     int sockfd = accept(listenfd, (struct sockaddr *)(&client), &client_addrlength);
     char buff[1024] = {0};
     char re[1024] = "hello socket, here is your message:\n";
